@@ -31,13 +31,13 @@ app.get('/', (req, res) => {
 
 
 // 404 HANDLER 
-app.use((req, res, next) => {
+app.use((req, res) => {
     res.status(404).send("Página no encontrada");
 });
 
 
 // ERROR HANDLER
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     console.error(err.message); // solo consola (backend)
 
     res.status(500).send("Algo salió mal. Intenta más tarde.");
