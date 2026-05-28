@@ -1,4 +1,4 @@
-# euVWA - Exploitable Vulnerable Web Application
+# ACTIVIDAD 1 euVWA - Exploitable Vulnerable Web Application
 
 Este proyecto es una adaptación de una aplicación tipo DVWA desarrollada en Node.js + Express. Su objetivo es implementar diferentes vulnerabilidades web de forma intencionada para su análisis y explotación, junto con una versión segura donde se aplican buenas prácticas de desarrollo seguro (Secure Coding).
 
@@ -226,3 +226,153 @@ El desarrollo de este proyecto me ha permitido implementar de forma práctica di
 La creación de dos versiones de la aplicación (vulnerable y secure) ha sido clave para observar de forma directa el impacto de aplicar buenas prácticas de desarrollo seguro. Mientras que la versión vulnerable permite la explotación de fallos comunes como SQL Injection, XSS o Command Injection, la versión secure demuestra cómo estos pueden mitigarse mediante validación de entradas, sanitización de datos, control de errores y otras medidas de seguridad.
 
 En conjunto, este trabajo refuerza la importancia de integrar la seguridad desde las primeras fases del desarrollo de software, evidenciando que pequeñas mejoras en el código pueden prevenir vulnerabilidades críticas.
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ACTIVIDAD 2 DevSecOps Pipeline – euVWA 
+
+## Introducción
+
+En este proyecto he implementado un entorno DevSecOps utilizando una aplicación web en Node.js con dos versiones: una vulnerable y otra segura.  
+El objetivo principal ha sido aplicar diferentes herramientas de seguridad a lo largo del ciclo de vida del software, incluyendo SAST, DAST, análisis de dependencias, generación de SBOM y análisis de imágenes Docker.
+
+---
+
+## Estructura del proyecto
+
+- `main-vulnerable/` → versión intencionadamente insegura de la aplicación
+- `main-secure/` → versión reforzada con medidas de hardening
+- `.github/workflows/` → pipelines CI/CD en GitHub Actions
+- `Dockerfile` → definición de la imagen containerizada
+- `sbom-vulnerable.json` → SBOM generado con Trivy
+- `trivy-vulnerable.json` → informe de vulnerabilidades de la imagen Docker
+- `zap-vulnerable.html` → informe DAST con OWASP ZAP
+
+---
+
+##  1. SAST (Static Application Security Testing)
+
+He implementado análisis estático de código mediante:
+
+- `npm audit` para detección de vulnerabilidades en dependencias
+- GitHub Actions CI pipeline con ejecución automática en cada push
+
+### Propósito de seguridad:
+Detectar vulnerabilidades conocidas en dependencias antes de la ejecución del software.
+
+### Resultado:
+La rama vulnerable presenta múltiples vulnerabilidades críticas en librerías como:
+- express
+- qs
+- body-parser
+- send
+
+En la versión secure se reducen significativamente mediante actualización de dependencias.
+
+---
+
+## 2. DAST (Dynamic Application Security Testing)
+
+Se utilizó OWASP ZAP en modo baseline scan contra la aplicación en ejecución.
+
+### Propósito de seguridad:
+Analizar la aplicación en tiempo de ejecución para detectar fallos como:
+- headers de seguridad faltantes
+- configuración insegura HTTP
+- posibles vulnerabilidades XSS o CSRF
+
+### Resultado:
+- Se detectaron headers de seguridad ausentes como CSP o X-Content-Type-Options
+- No se detectaron vulnerabilidades críticas (FAIL = 0)
+
+---
+
+##  3. SBOM (Software Bill of Materials)
+
+He generado un SBOM utilizando Trivy en formato CycloneDX.
+
+###  Propósito de seguridad:
+Obtener un inventario completo de todas las dependencias del sistema, tanto del sistema operativo como del ecosistema Node.js.
+
+### Evidencia:
+- `sbom-vulnerable.json`
+
+---
+
+## 4. Seguridad en contenedores (Docker + Trivy)
+
+Se ha creado una imagen Docker para la aplicación y posteriormente analizada con Trivy.
+
+###  Hardening aplicado en la imagen:
+
+- Uso de imagen base ligera (`node:18-alpine`)
+- Ejecución con usuario no root
+- Separación de capas para mejorar cache y control
+- Instalación de dependencias sin devDependencies
+
+### Propósito de seguridad:
+Reducir la superficie de ataque dentro del contenedor y evitar ejecución con privilegios elevados.
+
+### Evidencia:
+- `trivy-vulnerable.json`
+
+---
+
+## 5. CI/CD (GitHub Actions)
+
+Se han creado dos pipelines:
+
+### Pipeline vulnerable
+- Ejecuta `npm audit`
+- Diseñado para fallar al detectar vulnerabilidades
+
+### Pipeline secure
+- Ejecuta ESLint + checks básicos
+- Validación de código limpio
+
+### Propósito:
+Automatizar el análisis de seguridad en cada cambio del repositorio.
+
+---
+
+## 6. Comparación vulnerable vs secure
+
+| Elemento | Vulnerable | Secure |
+|----------|------------|--------|
+| Dependencias | Vulnerables | Actualizadas |
+| npm audit | FAIL | PASS |
+| OWASP ZAP | warnings | reducido |
+| Docker | inseguro | hardened |
+
+---
+
+## 7. Mejoras propuestas
+
+- Añadir umbral estricto en `npm audit` (ej: bloquear high/critical)
+- Integrar Snyk o SonarCloud en CI/CD
+- Usar multi-stage builds en Docker
+- Implementar escaneo automático en GitHub Container Registry
+- Añadir autenticación en DAST (ZAP authenticated scan)
+
+---
+
+## Conclusión
+
+Este proyecto demuestra la implementación de un flujo completo DevSecOps integrando seguridad en todas las fases del desarrollo: código, dependencias, contenedores y ejecución.
+
+He podido observar cómo la diferencia entre una versión vulnerable y una segura impacta directamente en los resultados de los análisis de seguridad.
+
+---
+
+## Estudiante
+Iris Carolina Fernández González
