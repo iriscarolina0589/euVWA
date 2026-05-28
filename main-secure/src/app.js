@@ -37,7 +37,7 @@ app.use((req, res) => {
 
 
 // ERROR HANDLER
-app.use((err, req, res,) => {
+app.use((err, req, res,next) => {
     console.error(err.message); // solo consola (backend)
 
     res.status(500).send("Algo salió mal. Intenta más tarde.");
@@ -47,4 +47,4 @@ app.use((err, req, res,) => {
 //SERVIDOR
 app.listen(3000, () => {
     console.log('Servidor SECURE en http://localhost:3000');
-});// trigger secure pipeline
+});
