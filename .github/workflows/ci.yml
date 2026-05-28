@@ -24,4 +24,5 @@ jobs:
 
     - name: Verificar ejecución básica
       run: echo "Pipeline funcionando correctamente"
+
       

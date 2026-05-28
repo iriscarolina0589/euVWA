@@ -37,7 +37,7 @@ app.use((req, res) => {
 
 
 // ERROR HANDLER
-app.use((err, req, res, next) => {
+app.use((err, req, res,) => {
     console.error(err.message); // solo consola (backend)
 
     res.status(500).send("Algo salió mal. Intenta más tarde.");
