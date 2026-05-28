@@ -1,0 +1,26 @@
+ame: Vulnerable SAST Pipeline
+
+on:
+  push:
+    branches: [ "main-vulnerable" ]
+  pull_request:
+    branches: [ "main-vulnerable" ]
+
+jobs:
+  sast:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run SAST (npm audit)
+        run: npm audit --audit-level=high
