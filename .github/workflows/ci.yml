@@ -22,7 +22,9 @@ jobs:
     - name: Instalar dependencias
       run: npm install
 
+    - name: SAST - ESLint Security Scan
+      run: npx eslint . --max-warnings 0
+
     - name: Verificar ejecución básica
       run: echo "Pipeline funcionando correctamente"
 
-      
