@@ -1,10 +1,10 @@
-ame: Vulnerable SAST Pipeline
+name: Vulnerable SAST Pipeline
 
 on:
   push:
-    branches: [ "main-vulnerable" ]
+    branches: [ main-vulnerable ]
   pull_request:
-    branches: [ "main-vulnerable" ]
+    branches: [ main-vulnerable ]
 
 jobs:
   sast:
