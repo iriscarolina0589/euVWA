@@ -1,10 +1,9 @@
-name: Vulnerable SAST Pipeline
+name: Vulnerable CI Pipeline
 
 on:
   push:
-    branches: [ main-vulnerable ]
-  pull_request:
-    branches: [ main-vulnerable ]
+    branches:
+      - main-vulnerable
 
 jobs:
   sast:
@@ -22,5 +21,5 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run SAST (npm audit)
+      - name: Run SAST (npm audit FAIL expected)
         run: npm audit --audit-level=high
